@@ -1,11 +1,11 @@
 .DS_Store
 
-# 로컬 전용 — 노션 ID·이메일 등 개인정보/비밀 (레포에 커밋 금지)
-*.local.md
-.claude/notion-config.local.md
+# 로컬 전용 — 실제 노션 ID·이메일 (커밋 금지)
+.claude/notion-ids.md
 
-# 시크릿/환경/로컬 설정
+# 시크릿 / 환경 / 로컬 설정
 .env
 .env.*
 *.local.json
+*.local.md
 .claude/settings.local.json
