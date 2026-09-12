@@ -34,16 +34,34 @@
 > 이 ID가 살아있으면 **절대 새 페이지/DB를 만들지 말고** 기존 DB에 append 한다.
 > ID가 죽었거나 못 찾으면 `notion-search`로 "AI 아카이브" 먼저 검색, 그래도 없을 때만 재생성 후 이 파일의 ID 갱신.
 
-### DB 속성 스키마
+### DB 스키마 (통합 · DB 2개, 한 페이지 "AI 아카이브" 밑)
+
+**① 아카이브 DB** — 모든 항목, Type으로 구분
 | 속성 | 타입 | 값 |
 |------|------|-----|
 | 제목 | Title | 항목 이름 |
 | Type | Select | `스킬` `레포` `프롬프트` `노트` |
 | 상태 | Select | `발견` `보는중` `테스트함` `실전투입` `참고용` |
-| 태그 | Multi-select | claude / agent / rag / cli / mcp / prompt … (새 값 자유 추가) |
+| 태그 | Multi-select | claude / cli / mcp / korean / notion / workflow … (자유 추가) |
 | 링크 | URL | 원본/출처 (내장·자작이면 비움) |
 | 모델 | Text | 프롬프트용 모델명 (없으면 비움) |
+| 리서치 날짜 | Date | 원문에서 추출 (리서치/도구 문서용, 없으면 비움) |
+| 부패속도 | Select | `빠름` `보통` `안썩음` |
+| 신선도 | Formula | 🟢/🟡/🔴/❓ (리서치 날짜+부패속도 자동) |
+| 관련 도구 | Relation | → 도구·레시피 DB |
 | 추가일 | Created time | 자동 |
+
+**② 도구·레시피 DB** — 설치해서 쓰는 것만 (문서에 도구 여러 개면 행 분리)
+| 속성 | 타입 | 값 |
+|------|------|-----|
+| 이름 | Title | 레포명 그대로 |
+| 뭐하는 건지 | Text | 한 줄 |
+| 설치 명령어 | Text | 원문 verbatim (한 글자도 안 바꿈) |
+| 종류 | Select | `플러그인` `스킬` `output-style` `CLAUDE.md 규칙` `MCP` |
+| 상태 | Select | `후보` `설치함` `뺐음` |
+| 링크 | URL | 레포 주소 |
+| 마지막 확인 | Date | 스타수·버전 확인일 |
+| 출처 문서 | Relation | → 아카이브 DB (양방향) |
 
 항목 생성은 `notion-create-pages` + `parent.data_source_id` 사용.
 properties 예: `{"제목":"...", "Type":"레포", "상태":"발견", "태그":["claude","cli"], "링크":"https://..."}`
